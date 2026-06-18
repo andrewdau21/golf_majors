@@ -6,11 +6,23 @@
 //  - Tiebreaker 2: lowest total of ALL remaining (non-top-4) players
 
 export function scoreEntry(entry, playerMap) {
-  const pickData = entry.picks.map((name) => {
+  const pickData = entry.picks.map((name, idx) => {
     const p = playerMap[name];
     return p
-      ? { name, scoreToPar: p.scoreToPar, madeCut: p.madeCut, isCut: p.isCut }
-      : { name, scoreToPar: 0, madeCut: false, isCut: false, notStarted: true };
+      ? {
+          name,
+          tier: idx + 1,
+          scoreToPar: p.scoreToPar,
+          madeCut: p.madeCut,
+          isCut: p.isCut,
+          headshot: p.headshot ?? null,
+          thru: p.thru ?? 0,
+          round: p.round ?? 1,
+          statusState: p.statusState ?? "pre",
+          statusName: p.statusName ?? "",
+          teeTime: p.teeTime ?? null,
+        }
+      : { name, tier: idx + 1, scoreToPar: 0, madeCut: false, isCut: false, notStarted: true };
   });
 
   const madePicksCut = pickData.filter((p) => p.madeCut);

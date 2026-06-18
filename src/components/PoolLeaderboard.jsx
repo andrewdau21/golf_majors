@@ -23,14 +23,51 @@ function RankBadge({ rank }) {
   return <span className="rank">{rank}</span>;
 }
 
+function TierBadge({ tier }) {
+  return <span className={`tier-badge tier-${tier}`}>T{tier}</span>;
+}
+
+function RoundStatus({ pick }) {
+  if (pick.notStarted) return null;
+  const { statusName, statusState, thru, round, teeTime } = pick;
+
+  if (statusName === "STATUS_CUT" || statusName === "STATUS_WD" || statusName === "STATUS_DQ") {
+    return null; // already shown via cut-label
+  }
+  if (statusState === "pre") {
+    if (!teeTime) return null;
+    const t = new Date(teeTime);
+    const time = t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    return <span className="pick-round">R1 · {time}</span>;
+  }
+  const holesDisplay = thru === 0 ? "F*" : thru === 18 ? "F" : `Thru ${thru}`;
+  return <span className="pick-round">R{round} · {holesDisplay}</span>;
+}
+
 function PickRow({ pick, best4Players }) {
   const isBest = best4Players?.includes(pick.name);
   const classes = ["pick-row", isBest ? "best" : "", pick.isCut ? "cut" : ""].filter(Boolean).join(" ");
+  const showScore = pick.madeCut || (!pick.isCut && !pick.notStarted);
+
   return (
     <div className={classes}>
-      <span className="pick-name">{pick.name}</span>
-      <span className="pick-score">{formatScore(pick.madeCut || (!pick.isCut && !pick.notStarted) ? pick.scoreToPar : null)}</span>
-      {pick.isCut && <span className="cut-label">CUT</span>}
+      <div className="pick-headshot">
+        {pick.headshot
+          ? <img src={pick.headshot} alt={pick.name} loading="lazy" />
+          : <span className="pick-headshot-placeholder">{pick.name.charAt(0)}</span>
+        }
+      </div>
+      <div className="pick-info">
+        <div className="pick-top-row">
+          <TierBadge tier={pick.tier} />
+          <span className="pick-name">{pick.name}</span>
+        </div>
+        <RoundStatus pick={pick} />
+      </div>
+      <div className="pick-right">
+        <span className="pick-score">{formatScore(showScore ? pick.scoreToPar : null)}</span>
+        {pick.isCut && <span className="cut-label">CUT</span>}
+      </div>
     </div>
   );
 }
