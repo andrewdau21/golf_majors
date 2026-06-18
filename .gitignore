@@ -12,8 +12,9 @@ dist
 dist-ssr
 *.local
 
-# Real entry data — place actual picks CSV here, never committed
+# Real entry data — never committed
 data/USOpen.csv
+src/data/entries.js
 
 # Editor directories and files
 .vscode/*

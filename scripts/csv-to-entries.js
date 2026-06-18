@@ -71,3 +71,9 @@ export const ENTRIES = ${JSON.stringify(entries, null, 2)};
 
 writeFileSync(resolve(root, "src/data/entries.js"), output);
 console.log("Wrote src/data/entries.js");
+
+const base64 = Buffer.from(JSON.stringify(entries)).toString("base64");
+console.log("\n--- Netlify ENTRIES_DATA env var ---");
+console.log(base64);
+console.log("------------------------------------");
+console.log("Paste the value above into Netlify: Site config → Environment variables → ENTRIES_DATA");
