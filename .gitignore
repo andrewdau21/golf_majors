@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Real entry data — place actual picks CSV here, never committed
+data/USOpen.csv
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

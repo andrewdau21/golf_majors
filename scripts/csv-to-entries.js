@@ -1,7 +1,7 @@
 // Run with: node scripts/csv-to-entries.js
 // Reads data/USOpen.csv and writes src/data/entries.js
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -23,7 +23,14 @@ function normalize(name) {
   return NAME_MAP[trimmed] ?? trimmed;
 }
 
-const csv = readFileSync(resolve(root, "data/USOpen.csv"), "utf8");
+const csvPath = resolve(root, "data/USOpen.csv");
+if (!existsSync(csvPath)) {
+  console.error("ERROR: data/USOpen.csv not found.");
+  console.error("Copy your real picks CSV to data/USOpen.csv (it is gitignored) then re-run.");
+  console.error("See data/USOpen.sample.csv for the expected format.");
+  process.exit(1);
+}
+const csv = readFileSync(csvPath, "utf8");
 const lines = csv.split("\n").filter((l) => l.trim());
 
 // Skip header row
