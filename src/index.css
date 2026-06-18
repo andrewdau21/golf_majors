@@ -85,6 +85,32 @@ body {
 
 /* Pool Leaderboard */
 .pool-leaderboard { margin-top: 8px; }
+
+.search-bar {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+.search-icon { color: var(--text-muted); font-size: 1.2rem; line-height: 1; }
+.search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.search-input::placeholder { color: var(--text-muted); }
+.search-clear {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-muted); font-size: 0.8rem; padding: 2px 4px;
+  border-radius: 3px;
+}
+.search-clear:hover { color: var(--text); background: var(--border); }
+.search-empty { padding: 24px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
 .pool-header-row {
   display: flex; align-items: center; gap: 8px;
   padding: 6px 12px;

@@ -125,6 +125,7 @@ function EntryRow({ entry, expanded, starred, onToggle, onStar }) {
 export default function PoolLeaderboard({ rankedEntries }) {
   const [expandedId, setExpandedId] = useState(null);
   const [starred, setStarred] = useState(loadStarred);
+  const [query, setQuery] = useState("");
 
   const toggle = (id) => setExpandedId((prev) => (prev === id ? null : id));
 
@@ -144,10 +145,35 @@ export default function PoolLeaderboard({ rankedEntries }) {
     return [...pinned, ...rest];
   }, [rankedEntries, starred]);
 
-  const hasStarred = starred.size > 0;
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return sorted;
+    return sorted.filter((e) => e.name.toLowerCase().includes(q));
+  }, [sorted, query]);
+
+  const isSearching = query.trim().length > 0;
+  const hasStarred = !isSearching && starred.size > 0;
 
   return (
     <div className="pool-leaderboard">
+      <div className="search-bar">
+        <span className="search-icon">⌕</span>
+        <input
+          type="text"
+          placeholder="Search entries…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="search-input"
+        />
+        {isSearching && (
+          <button className="search-clear" onClick={() => setQuery("")} aria-label="Clear">✕</button>
+        )}
+      </div>
+
+      {filtered.length === 0 && (
+        <div className="search-empty">No entries match "{query}"</div>
+      )}
+
       <div className="pool-header-row">
         <span style={{ width: 32 }}></span>
         <span style={{ width: 40 }}>#</span>
@@ -156,7 +182,7 @@ export default function PoolLeaderboard({ rankedEntries }) {
         <span style={{ width: 24 }}></span>
       </div>
       {hasStarred && <div className="section-divider">Favorites</div>}
-      {sorted.map((entry, i) => {
+      {filtered.map((entry, i) => {
         const isFirstUnstarred = hasStarred && i === starred.size;
         return (
           <div key={entry.id}>
