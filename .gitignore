@@ -13,8 +13,9 @@ dist-ssr
 *.local
 
 # Real entry data — never committed
-data/USOpen.csv
-src/data/entries.js
+data/USOpen.csv       # raw picks CSV (source of truth, local only)
+src/data/entries.js   # generated at build time, local only
+# data/entries.enc is intentionally tracked — it is AES-256-GCM encrypted
 
 # Editor directories and files
 .vscode/*

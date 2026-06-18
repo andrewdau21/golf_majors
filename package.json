@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "encrypt": "node scripts/encrypt-entries.js",
     "prebuild": "node scripts/build-entries.js",
     "build": "vite build",
     "preview": "vite preview"
