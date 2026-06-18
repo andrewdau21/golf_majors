@@ -62,13 +62,10 @@ export function scoreEntry(entry, playerMap) {
 }
 
 export function rankEntries(scoredEntries) {
+  // Sort by best-4 score only — ties are expected and displayed as-is
   const made = scoredEntries
     .filter((e) => !e.missedCut)
-    .sort((a, b) => {
-      if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
-      if (a.cutPlayers !== b.cutPlayers) return b.cutPlayers - a.cutPlayers;
-      return a.tiebreaker2 - b.tiebreaker2;
-    });
+    .sort((a, b) => a.totalScore - b.totalScore);
 
   const missed = scoredEntries
     .filter((e) => e.missedCut)
@@ -77,13 +74,10 @@ export function rankEntries(scoredEntries) {
   let rank = 1;
   const ranked = [];
   for (let i = 0; i < made.length; i++) {
-    const isTie =
-      i > 0 &&
-      made[i].totalScore === made[i - 1].totalScore &&
-      made[i].cutPlayers === made[i - 1].cutPlayers &&
-      made[i].tiebreaker2 === made[i - 1].tiebreaker2;
+    const isTie = i > 0 && made[i].totalScore === made[i - 1].totalScore;
     if (!isTie) rank = i + 1;
-    ranked.push({ ...made[i], rank, tied: isTie || (i < made.length - 1 && made[i].totalScore === made[i + 1]?.totalScore) });
+    const nextTie = made[i].totalScore === made[i + 1]?.totalScore;
+    ranked.push({ ...made[i], rank, tied: isTie || nextTie });
   }
 
   missed.forEach((e) => ranked.push({ ...e, rank: null }));

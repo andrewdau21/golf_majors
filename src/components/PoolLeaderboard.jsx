@@ -15,12 +15,13 @@ function saveStarred(set) {
   localStorage.setItem(STARRED_KEY, JSON.stringify([...set]));
 }
 
-function RankBadge({ rank }) {
+function RankBadge({ rank, tied }) {
+  const label = tied ? `T${rank}` : rank;
   if (rank === null) return <span className="rank missed">MC</span>;
-  if (rank === 1) return <span className="rank gold">{rank}</span>;
-  if (rank === 2) return <span className="rank silver">{rank}</span>;
-  if (rank === 3) return <span className="rank bronze">{rank}</span>;
-  return <span className="rank">{rank}</span>;
+  if (rank === 1) return <span className="rank gold">{label}</span>;
+  if (rank === 2) return <span className="rank silver">{label}</span>;
+  if (rank === 3) return <span className="rank bronze">{label}</span>;
+  return <span className="rank">{label}</span>;
 }
 
 function TierBadge({ tier }) {
@@ -44,6 +45,15 @@ function RoundStatus({ pick }) {
   return <span className="pick-round">R{round} · {holesDisplay}</span>;
 }
 
+function StatusDot({ pick }) {
+  if (pick.notStarted || pick.isCut) return null;
+  const onCourse = pick.statusState === "in" && pick.thru < 18;
+  const finished = pick.statusState === "post" || (pick.statusState === "in" && pick.thru === 18);
+  if (onCourse) return <span className="status-dot on-course" title="On the course" />;
+  if (finished)  return <span className="status-dot finished"  title="Round complete" />;
+  return           <span className="status-dot not-started"   title="Not yet started" />;
+}
+
 function PickRow({ pick, best4Players }) {
   const isBest = best4Players?.includes(pick.name);
   const classes = ["pick-row", isBest ? "best" : "", pick.isCut ? "cut" : ""].filter(Boolean).join(" ");
@@ -51,11 +61,14 @@ function PickRow({ pick, best4Players }) {
 
   return (
     <div className={classes}>
-      <div className="pick-headshot">
-        {pick.headshot
-          ? <img src={pick.headshot} alt={pick.name} loading="lazy" />
-          : <span className="pick-headshot-placeholder">{pick.name.charAt(0)}</span>
-        }
+      <div className="pick-headshot-wrap">
+        <div className="pick-headshot">
+          {pick.headshot
+            ? <img src={pick.headshot} alt={pick.name} loading="lazy" />
+            : <span className="pick-headshot-placeholder">{pick.name.charAt(0)}</span>
+          }
+        </div>
+        <StatusDot pick={pick} />
       </div>
       <div className="pick-info">
         <div className="pick-top-row">
@@ -89,7 +102,7 @@ function EntryRow({ entry, expanded, starred, onToggle, onStar }) {
           {starred ? "★" : "☆"}
         </button>
         <button className="entry-header" onClick={onToggle}>
-          <RankBadge rank={entry.rank} />
+          <RankBadge rank={entry.rank} tied={entry.tied} />
           <span className="entry-name">{entry.name}</span>
           <span className="entry-score">
             {entry.missedCut ? "MC" : formatScore(entry.totalScore)}
