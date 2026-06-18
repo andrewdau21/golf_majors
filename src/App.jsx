@@ -53,6 +53,14 @@ export default function App() {
     []
   );
 
+  const pickCounts = useMemo(() => {
+    const counts = {};
+    ENTRIES.forEach((e) => e.picks.forEach((name) => {
+      counts[name] = (counts[name] || 0) + 1;
+    }));
+    return counts;
+  }, []);
+
   return (
     <div className="app">
       <TournamentBanner
@@ -81,7 +89,7 @@ export default function App() {
           <PoolLeaderboard rankedEntries={rankedEntries} />
         )}
         {!loading && tab === 1 && (
-          <GolfLeaderboard players={players} poolPlayerNames={allPoolPlayers} />
+          <GolfLeaderboard players={players} poolPlayerNames={allPoolPlayers} pickCounts={pickCounts} />
         )}
       </div>
     </div>

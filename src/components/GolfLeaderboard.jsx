@@ -23,7 +23,22 @@ function StatusBadge({ player }) {
   return <span className="badge sched">Sched</span>;
 }
 
-export default function GolfLeaderboard({ players, poolPlayerNames }) {
+function PickCountBadge({ count }) {
+  if (!count) return null;
+  // Shade the badge darker → brighter as pick count rises
+  const intensity = Math.min(count / 20, 1); // saturates at 20 picks
+  return (
+    <span
+      className="pick-count-badge"
+      title={`Selected by ${count} ${count === 1 ? "entry" : "entries"}`}
+      style={{ opacity: 0.45 + intensity * 0.55 }}
+    >
+      {count}
+    </span>
+  );
+}
+
+export default function GolfLeaderboard({ players, poolPlayerNames, pickCounts }) {
   const poolSet = new Set(poolPlayerNames);
 
   return (
@@ -31,6 +46,7 @@ export default function GolfLeaderboard({ players, poolPlayerNames }) {
       <div className="gl-header">
         <span className="gl-pos">Pos</span>
         <span className="gl-name">Player</span>
+        <span className="gl-picks" title="Pool entries who picked this player">Picks</span>
         <span className="gl-score">Score</span>
         <span className="gl-status">Status</span>
       </div>
@@ -49,6 +65,9 @@ export default function GolfLeaderboard({ players, poolPlayerNames }) {
           <span className="gl-name">
             {poolSet.has(p.name) && <span className="pool-dot" title="In pool">●</span>}
             {p.name}
+          </span>
+          <span className="gl-picks">
+            <PickCountBadge count={pickCounts[p.name]} />
           </span>
           <span className={`gl-score ${p.scoreToPar < 0 ? "under" : p.scoreToPar > 0 ? "over" : ""}`}>
             {p.scoreDisplay}
