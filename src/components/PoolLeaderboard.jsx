@@ -39,7 +39,7 @@ function RoundStatus({ pick }) {
     if (!teeTime) return null;
     const t = new Date(teeTime);
     const time = t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-    return <span className="pick-round">R1 · {time}</span>;
+    return <span className="pick-round">R{round} · {time}</span>;
   }
   const holesDisplay = thru === 0 ? "F*" : thru === 18 ? "F" : `Thru ${thru}`;
   return <span className="pick-round">R{round} · {holesDisplay}</span>;
