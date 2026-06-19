@@ -30,19 +30,34 @@ function TierBadge({ tier }) {
 
 function RoundStatus({ pick }) {
   if (pick.notStarted) return null;
-  const { statusName, statusState, thru, round, teeTime } = pick;
+  const { statusName, statusState, thru, round, rounds, teeTime } = pick;
 
   if (statusName === "STATUS_CUT" || statusName === "STATUS_WD" || statusName === "STATUS_DQ") {
-    return null; // already shown via cut-label
+    return null;
   }
+
+  const currentRoundScore = rounds?.find((r) => r.round === round);
+  const roundScoreDisplay =
+    currentRoundScore?.display && currentRoundScore.display !== "-"
+      ? currentRoundScore.display
+      : null;
+
   if (statusState === "pre") {
     if (!teeTime) return null;
     const t = new Date(teeTime);
     const time = t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     return <span className="pick-round">R{round} · {time}</span>;
   }
-  const holesDisplay = thru === 0 ? "F*" : thru === 18 ? "F" : `Thru ${thru}`;
-  return <span className="pick-round">R{round} · {holesDisplay}</span>;
+
+  const holesDisplay = thru === 18 ? "F" : `Thru ${thru}`;
+  return (
+    <span className="pick-round">
+      R{round} · {holesDisplay}
+      {roundScoreDisplay && (
+        <span className="pick-round-score">{roundScoreDisplay}</span>
+      )}
+    </span>
+  );
 }
 
 function StatusDot({ pick }) {

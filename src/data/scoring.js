@@ -18,6 +18,7 @@ export function scoreEntry(entry, playerMap) {
           headshot: p.headshot ?? null,
           thru: p.thru ?? 0,
           round: p.round ?? 1,
+          rounds: p.rounds ?? [],
           statusState: p.statusState ?? "pre",
           statusName: p.statusName ?? "",
           teeTime: p.teeTime ?? null,
