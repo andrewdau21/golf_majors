@@ -167,20 +167,19 @@ export default function PoolLeaderboard({ rankedEntries }) {
     });
   };
 
-  const sorted = useMemo(() => {
-    const pinned = rankedEntries.filter((e) => starred.has(e.id));
-    const rest = rankedEntries.filter((e) => !starred.has(e.id));
-    return [...pinned, ...rest];
-  }, [rankedEntries, starred]);
+  const pinned = useMemo(
+    () => rankedEntries.filter((e) => starred.has(e.id)),
+    [rankedEntries, starred]
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return sorted;
-    return sorted.filter((e) => e.name.toLowerCase().includes(q));
-  }, [sorted, query]);
+    if (!q) return rankedEntries;
+    return rankedEntries.filter((e) => e.name.toLowerCase().includes(q));
+  }, [rankedEntries, query]);
 
   const isSearching = query.trim().length > 0;
-  const hasStarred = !isSearching && starred.size > 0;
+  const hasStarred = !isSearching && pinned.length > 0;
 
   return (
     <div className="pool-leaderboard">
@@ -209,22 +208,32 @@ export default function PoolLeaderboard({ rankedEntries }) {
         <span style={{ width: 60, textAlign: "right" }}>Score</span>
         <span style={{ width: 24 }}></span>
       </div>
-      {hasStarred && <div className="section-divider">Favorites</div>}
-      {filtered.map((entry, i) => {
-        const isFirstUnstarred = hasStarred && i === starred.size;
-        return (
-          <div key={entry.id}>
-            {isFirstUnstarred && <div className="section-divider">All Entries</div>}
+      {hasStarred && (
+        <>
+          <div className="section-divider">Favorites</div>
+          {pinned.map((entry) => (
             <EntryRow
+              key={`p-${entry.id}`}
               entry={entry}
               expanded={expandedId === entry.id}
               starred={starred.has(entry.id)}
               onToggle={() => toggle(entry.id)}
               onStar={() => toggleStar(entry.id)}
             />
-          </div>
-        );
-      })}
+          ))}
+          <div className="section-divider">All Entries</div>
+        </>
+      )}
+      {filtered.map((entry) => (
+        <EntryRow
+          key={entry.id}
+          entry={entry}
+          expanded={expandedId === entry.id}
+          starred={starred.has(entry.id)}
+          onToggle={() => toggle(entry.id)}
+          onStar={() => toggleStar(entry.id)}
+        />
+      ))}
     </div>
   );
 }
