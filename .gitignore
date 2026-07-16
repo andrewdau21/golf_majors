@@ -14,6 +14,7 @@ dist-ssr
 
 # Real entry data — never committed
 data/USOpen.csv       # raw picks CSV (source of truth, local only)
+data/FinalBritish.csv # raw picks CSV (source of truth, local only)
 src/data/entries.js   # generated at build time, local only
 # data/entries.enc is intentionally tracked — it is AES-256-GCM encrypted
 

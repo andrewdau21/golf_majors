@@ -14,9 +14,9 @@ function TournamentBanner({ status, lastUpdated, onRefresh }) {
   return (
     <div className={`banner ${isLive ? "live" : isPre ? "pre" : "post"}`}>
       <div className="banner-left">
-        <span className="banner-title">U.S. Open 2026</span>
+        <span className="banner-title">The Open 2026</span>
         {isLive && <span className="live-dot">● LIVE</span>}
-        {isPre && <span className="status-label">Starts June 18</span>}
+        {isPre && <span className="status-label">Starts July 16</span>}
         {status.state === "post" && <span className="status-label">Final</span>}
       </div>
       <div className="banner-right">

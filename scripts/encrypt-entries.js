@@ -44,9 +44,9 @@ function normalize(name) {
   return NAME_MAP[t] ?? t;
 }
 
-const csvPath = resolve(root, "data/USOpen.csv");
+const csvPath = resolve(root, "data/FinalBritish.csv");
 if (!existsSync(csvPath)) {
-  console.error("ERROR: data/USOpen.csv not found. See data/USOpen.sample.csv for format.");
+  console.error("ERROR: data/FinalBritish.csv not found. See data/USOpen.sample.csv for format.");
   process.exit(1);
 }
 

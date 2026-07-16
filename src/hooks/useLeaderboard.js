@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-const TOURNAMENT_ID = "401811952"; // US Open 2026
+const TOURNAMENT_ID = "401811957"; // The Open 2026
 const API_URL = `https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga&tournament=${TOURNAMENT_ID}`;
 const POLL_INTERVAL = 60_000; // refresh every 60s during live play
 
