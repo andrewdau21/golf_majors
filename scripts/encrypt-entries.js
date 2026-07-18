@@ -37,6 +37,8 @@ const NAME_MAP = {
   "Joaquin Niemann": "Joaquín Niemann",
   "Matthias Schmid": "Matti Schmid",
   "Benjamin James": "Ben James",
+  "John Keefer": "Johnny Keefer",
+  "Eugenio Lopez-Chacarra": "Eugenio Chacarra",
 };
 
 function normalize(name) {
